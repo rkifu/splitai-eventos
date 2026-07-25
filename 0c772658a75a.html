@@ -90,7 +90,7 @@ const corDe=s=>{let h=0;for(const c of s)h=(h*31+c.charCodeAt(0))>>>0;return COR
 const token=location.pathname.split('/').pop();
 (async()=>{
   const wrap=document.getElementById('wrap');
-  let d = {"descricao":"Outback Steakhouse","valor_total":542.56,"data":"2026-07-25","status":"aberto","criado_em":"2026-07-25 05:15:30","pagador":"Roger","participantes":[{"nome":"Roger","valor_devido":67.82,"pago":1},{"nome":"Akon","valor_devido":67.82,"pago":0},{"nome":"Amá","valor_devido":67.82,"pago":0},{"nome":"Tih","valor_devido":67.82,"pago":0},{"nome":"Erika","valor_devido":67.82,"pago":0},{"nome":"Long","valor_devido":67.82,"pago":0},{"nome":"Dandan","valor_devido":67.82,"pago":0},{"nome":"Yien","valor_devido":67.82,"pago":0}],"aReceber":474.73999999999995};
+  let d = {"descricao":"Outback Steakhouse","valor_total":542.56,"data":"2026-07-25","status":"aberto","criado_em":"2026-07-25 05:15:30","pagador":"Roger","participantes":[{"nome":"Roger","valor_devido":67.82,"pago":1},{"nome":"Akon","valor_devido":67.82,"pago":1},{"nome":"Amá","valor_devido":67.82,"pago":0},{"nome":"Tih","valor_devido":67.82,"pago":0},{"nome":"Erika","valor_devido":67.82,"pago":0},{"nome":"Long","valor_devido":67.82,"pago":0},{"nome":"Dandan","valor_devido":67.82,"pago":0},{"nome":"Yien","valor_devido":67.82,"pago":0}],"aReceber":406.91999999999996};
   if(!d||d.erro){wrap.innerHTML='<div class="err">split não encontrado.</div>';return;}
   const TZ={timeZone:'America/Sao_Paulo'};
   const dt=d.criado_em? new Date(d.criado_em.replace(' ','T')+'Z') : new Date(d.data+'T12:00:00-03:00');
