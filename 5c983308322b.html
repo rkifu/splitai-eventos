@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>splitai</title>
+<style>
+  :root{
+    --bg:#0a0b0d; --panel:#0e1014; --line:#1e2127; --line2:#2a2e36;
+    --ink:#f4f6f8; --ink2:#a7adb8; --muted:#6b7280;
+    --neon:#c8f94c; --neon-d:#a8e024; --owe:#ffb454; --paid:#5ce8b0;
+    --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,"Roboto Mono",monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg)}
+  body{color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+    display:flex;justify-content:center;padding:0 16px 56px;-webkit-font-smoothing:antialiased}
+  .wrap{width:100%;max-width:440px}
+
+  /* topo: logo em destaque + data */
+  .bar{display:flex;align-items:center;justify-content:space-between;padding:24px 2px 18px}
+  .mark{display:flex;align-items:center;gap:11px;font-weight:800;font-size:23px;letter-spacing:-.02em}
+  .mark .sq{width:32px;height:32px;border-radius:9px;background:var(--neon);
+    display:flex;align-items:center;justify-content:center;color:#0a0b0d;font-size:19px;font-weight:900;
+    box-shadow:0 0 20px rgba(200,249,76,.35)}
+  .mark b{color:var(--ink);font-weight:800} .mark b span{color:var(--neon)}
+  .ev-date{font-size:14.5px;color:var(--ink2);font-weight:500;font-family:var(--mono);text-align:right;line-height:1.35}
+  .ev-date small{display:block;font-size:12.5px;color:var(--muted)}
+
+  /* caixa registradora: o valor */
+  .reg{border:1px solid var(--line2);border-radius:16px;
+    background:linear-gradient(180deg,#12151a,#0c0e12);
+    padding:16px 20px 18px;box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 10px 34px rgba(0,0,0,.45);
+    position:relative;overflow:hidden}
+  .reg::before{content:"";position:absolute;left:0;top:0;right:0;height:2px;
+    background:linear-gradient(90deg,var(--neon-d),var(--neon));opacity:.9}
+  .reg .lbl{display:flex;justify-content:space-between;align-items:center;
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;color:var(--muted);text-transform:uppercase}
+  .reg .lbl .pago{color:var(--paid)}
+  .reg .amt{font-family:var(--mono);font-weight:600;letter-spacing:-.03em;line-height:1;
+    text-align:right;margin-top:10px;font-size:clamp(40px,13vw,58px);
+    text-shadow:0 0 22px rgba(200,249,76,.10)}
+
+  /* progresso */
+  .prog{margin:20px 2px 0}
+  .prog .track{height:7px;background:var(--line);border-radius:999px;overflow:hidden}
+  .prog .fill{height:100%;background:linear-gradient(90deg,var(--neon-d),var(--neon));border-radius:999px;
+    box-shadow:0 0 14px rgba(200,249,76,.5);transition:width .5s ease}
+  .prog .cap{display:flex;justify-content:space-between;margin-top:9px;font-family:var(--mono);font-size:12px;color:var(--ink2)}
+  .prog .cap .pct{color:var(--neon)}
+
+  /* título do evento: caixa própria, centralizado, em destaque */
+  .title{text-align:center;margin:22px 0 4px;border:1px solid var(--line2);border-radius:16px;
+    background:linear-gradient(180deg,#101318,#0b0d11);padding:22px 20px 20px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.03)}
+  .title h1{margin:0;font-size:32px;font-weight:800;letter-spacing:-.02em;text-transform:lowercase}
+  .title .meta{margin-top:12px;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;font-size:15px}
+  .title .ppl{color:var(--ink2);font-weight:600}
+  .title .st{font-family:var(--mono);font-size:13px;font-weight:600;border:1px solid var(--line2);
+    border-radius:999px;padding:5px 13px}
+  .title .st.ok{color:var(--paid);border-color:rgba(92,232,176,.35)}
+  .title .st.open{color:var(--owe);border-color:rgba(255,180,84,.30)}
+
+  /* lista estilo recibo */
+  .list{margin:22px 0 0;border-top:1px dashed var(--line2)}
+  .row{display:flex;align-items:center;gap:13px;padding:15px 2px;border-bottom:1px dashed var(--line2)}
+  .av{width:34px;height:34px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+    font-weight:700;font-size:14px;color:#0a0b0d}
+  .nm{flex:1;min-width:0}
+  .nm .n{font-weight:600;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .nm .s{font-size:12px;color:var(--muted);margin-top:1px}
+  .amt{text-align:right;flex-shrink:0;font-family:var(--mono)}
+  .amt .v{font-size:15px;font-weight:600;font-variant-numeric:tabular-nums}
+  .amt .t{font-size:10px;font-weight:700;letter-spacing:.08em;margin-top:2px;text-transform:uppercase;font-family:system-ui}
+  .owe .v{color:var(--ink)} .owe .t{color:var(--owe)}
+  .paid .v{color:var(--muted);text-decoration:line-through} .paid .t{color:var(--paid)}
+  .payer .v{color:var(--ink2)} .payer .t{color:var(--muted)}
+  .foot{text-align:center;color:var(--muted);font-size:12px;padding:26px 20px 0;line-height:1.7}
+  .foot .brand{color:var(--ink2)} .foot .brand span{color:var(--neon)}
+  .load,.err{padding:80px 24px;text-align:center;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap" id="wrap"><div class="load">carregando…</div></div>
+<script>
+const brl=n=>n.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const ini=s=>s.trim().charAt(0).toUpperCase();
+const CORES=['#c8f94c','#5ce8b0','#7cc4ff','#c9a3ff','#ffb454','#ff8fa3','#8fe6d0','#ffd166'];
+const corDe=s=>{let h=0;for(const c of s)h=(h*31+c.charCodeAt(0))>>>0;return CORES[h%CORES.length];};
+const token=location.pathname.split('/').pop();
+(async()=>{
+  const wrap=document.getElementById('wrap');
+  let d = {"descricao":"Almoço","valor_total":240,"data":"2026-07-25","status":"quitado","criado_em":"2026-07-25 02:40:50","pagador":"Roger","participantes":[{"nome":"Joao","valor_devido":100,"pago":1},{"nome":"Roger","valor_devido":46.67,"pago":1},{"nome":"Maria","valor_devido":46.67,"pago":1},{"nome":"Pedro","valor_devido":46.66,"pago":1}],"aReceber":0};
+  if(!d||d.erro){wrap.innerHTML='<div class="err">split não encontrado.</div>';return;}
+  const TZ={timeZone:'America/Sao_Paulo'};
+  const dt=d.criado_em? new Date(d.criado_em.replace(' ','T')+'Z') : new Date(d.data+'T12:00:00-03:00');
+  const diaFmt=dt.toLocaleDateString('pt-BR',{...TZ,day:'2-digit',month:'2-digit',year:'numeric'});
+  const horaFmt=dt.toLocaleTimeString('pt-BR',{...TZ,hour:'2-digit',minute:'2-digit'});
+  const pago=d.participantes.filter(p=>p.pago).reduce((s,p)=>s+p.valor_devido,0);
+  const pct=d.valor_total? Math.round(pago/d.valor_total*100):0;
+  const rows=d.participantes.map(p=>{
+    const payer=p.nome.trim().toLowerCase()===d.pagador.trim().toLowerCase();
+    const cls=payer?'payer':(p.pago?'paid':'owe');
+    const tag=payer?'pagou':(p.pago?'✓ pago':'deve');
+    const sub=payer?'bancou a conta':(p.pago?'acertou':'ainda não pagou');
+    return `<div class="row ${cls}">
+      <span class="av" style="background:${corDe(p.nome)}">${ini(p.nome)}</span>
+      <span class="nm"><div class="n">${p.nome}</div><div class="s">${sub}</div></span>
+      <span class="amt"><div class="v">${brl(p.valor_devido)}</div><div class="t">${tag}</div></span>
+    </div>`;
+  }).join('');
+  wrap.innerHTML=`
+    <div class="bar">
+      <span class="mark"><span class="sq">S</span><b>split<span>ai</span></b></span>
+      <span class="ev-date">${diaFmt}<small>${horaFmt}</small></span>
+    </div>
+    <div class="reg">
+      <div class="lbl"><span>total da conta</span>${d.status==='quitado'?'<span class="pago">● quitado</span>':`<span>${pct}% pago</span>`}</div>
+      <div class="amt">${brl(d.valor_total)}</div>
+    </div>
+    <div class="prog">
+      <div class="track"><div class="fill" style="width:${pct}%"></div></div>
+      <div class="cap"><span>${brl(pago)} acertado</span><span class="pct">${pct}%</span></div>
+    </div>
+    <div class="title">
+      <h1>${d.descricao}</h1>
+      <div class="meta">
+        <span class="ppl">${d.participantes.length} pessoas</span>
+        <span class="st ${d.status==='quitado'?'ok':'open'}">${d.status==='quitado'?'🎉 Pagamento Finalizado':'em aberto'}</span>
+      </div>
+    </div>
+    <div class="list">${rows}</div>
+    <div class="foot">Achou seu nome? É o valor que você acerta com ${d.pagador}.<br>
+      <span class="brand">feito com split<span>ai</span></span></div>`;
+  document.title='splitai · '+d.descricao;
+})();
+</script>
+</body>
+</html>
