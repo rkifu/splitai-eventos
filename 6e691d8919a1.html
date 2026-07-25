@@ -90,7 +90,7 @@ const corDe=s=>{let h=0;for(const c of s)h=(h*31+c.charCodeAt(0))>>>0;return COR
 const token=location.pathname.split('/').pop();
 (async()=>{
   const wrap=document.getElementById('wrap');
-  let d = {"descricao":"Rochinha","valor_total":50,"data":"2026-07-25","status":"aberto","criado_em":"2026-07-25 05:45:11","pagador":"Roger","participantes":[{"nome":"Roger","valor_devido":16.67,"pago":1},{"nome":"Tih","valor_devido":16.67,"pago":0},{"nome":"Oliver","valor_devido":16.66,"pago":0}],"aReceber":33.33};
+  let d = {"descricao":"Rochinha","valor_total":50,"data":"2026-07-25","status":"aberto","criado_em":"2026-07-25 05:45:11","pagador":"Roger","participantes":[{"nome":"Roger","valor_devido":16.67,"pago":1},{"nome":"Tih","valor_devido":16.67,"pago":0},{"nome":"Oliver","valor_devido":16.66,"pago":1}],"aReceber":16.67};
   if(!d||d.erro){wrap.innerHTML='<div class="err">split não encontrado.</div>';return;}
   const TZ={timeZone:'America/Sao_Paulo'};
   const dt=d.criado_em? new Date(d.criado_em.replace(' ','T')+'Z') : new Date(d.data+'T12:00:00-03:00');
