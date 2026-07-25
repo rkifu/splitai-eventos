@@ -90,7 +90,7 @@ const corDe=s=>{let h=0;for(const c of s)h=(h*31+c.charCodeAt(0))>>>0;return COR
 const token=location.pathname.split('/').pop();
 (async()=>{
   const wrap=document.getElementById('wrap');
-  let d = {"descricao":"F E Bertino Maciel Restaurante ME","valor_total":272,"data":"2026-07-25","status":"aberto","criado_em":"2026-07-25 05:05:14","pagador":"Roger","participantes":[{"nome":"Roger","valor_devido":90.67,"pago":1},{"nome":"Tih","valor_devido":90.67,"pago":0},{"nome":"Oliver","valor_devido":90.66,"pago":0}],"aReceber":181.32999999999998};
+  let d = {"descricao":"F E Bertino Maciel Restaurante ME","valor_total":272,"data":"2026-07-25","status":"quitado","criado_em":"2026-07-25 05:05:14","pagador":"Roger","participantes":[{"nome":"Roger","valor_devido":90.67,"pago":1},{"nome":"Tih","valor_devido":90.67,"pago":1},{"nome":"Oliver","valor_devido":90.66,"pago":1}],"aReceber":0};
   if(!d||d.erro){wrap.innerHTML='<div class="err">split não encontrado.</div>';return;}
   const TZ={timeZone:'America/Sao_Paulo'};
   const dt=d.criado_em? new Date(d.criado_em.replace(' ','T')+'Z') : new Date(d.data+'T12:00:00-03:00');
